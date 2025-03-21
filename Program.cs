@@ -1,7 +1,29 @@
+using JWTAuthentication.Common.Services;
+using JWTAuthentication.Database;
+using JWTAuthentication.Interfaces;
+using JWTAuthentication.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
+#region --service config
+
 builder.Services.AddControllersWithViews();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+builder.Services.AddTransient<IUserService, UsersService>();
+builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
+builder.Services.AddControllers();
+builder.Services.AddDbContext<ApplicationDbContext>((options) =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>();
+
+#endregion
 
 var app = builder.Build();
 
@@ -9,10 +31,11 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+app.UseSwaggerUI();
+app.UseSwagger();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

@@ -1,0 +1,2 @@
+﻿namespace JWTAuthentication.Application.Register;
+

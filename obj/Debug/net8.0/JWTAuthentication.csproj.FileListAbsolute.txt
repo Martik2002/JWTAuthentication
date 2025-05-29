@@ -148,3 +148,7 @@ C:\Users\Martik\RiderProjects\Kursayin\JWTAuthentication\bin\Debug\net8.0\Micros
 C:\Users\Martik\RiderProjects\Kursayin\JWTAuthentication\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions.dll
 C:\Users\Martik\RiderProjects\Kursayin\JWTAuthentication\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll
 C:\Users\Martik\RiderProjects\Kursayin\JWTAuthentication\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\Martik\RiderProjects\Kursayin\JWTAuthentication\bin\Debug\net8.0\MediatR.dll
+C:\Users\Martik\RiderProjects\Kursayin\JWTAuthentication\bin\Debug\net8.0\MediatR.Contracts.dll
+C:\Users\Martik\RiderProjects\Kursayin\JWTAuthentication\bin\Debug\net8.0\MediatR.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\Martik\RiderProjects\Kursayin\JWTAuthentication\bin\Debug\net8.0\Npgsql.DependencyInjection.dll

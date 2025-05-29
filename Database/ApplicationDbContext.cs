@@ -4,12 +4,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace JWTAuthentication.Database;
-public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<User>(options), IApplicationDbContext
 {
-
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

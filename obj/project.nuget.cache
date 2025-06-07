@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oWG0bqAvblI=",
+  "dgSpecHash": "B//U6BG6oHw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Martik\\RiderProjects\\Kursayin\\JWTAuthentication\\JWTAuthentication.csproj",
+  "projectFilePath": "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\JWTAuthentication.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Martik\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Martik\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

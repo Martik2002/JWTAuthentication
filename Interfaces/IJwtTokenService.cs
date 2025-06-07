@@ -1,6 +1,8 @@
-﻿namespace JWTAuthentication.Interfaces;
+﻿using JWTAuthentication.Entities;
+
+namespace JWTAuthentication.Interfaces;
 
 public interface IJwtTokenService
 {
-    string GenerateToken(string username);
+    string GenerateToken(User user);
 }

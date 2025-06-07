@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using JWTAuthentication.Common.Models;
+using JWTAuthentication.Entities;
 using JWTAuthentication.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -12,12 +13,19 @@ public sealed class JwtTokenService(IOptions<JwtSettings> options) : IJwtTokenSe
 {
     private readonly JwtSettings _settings = options.Value;
 
-    public string GenerateToken(string username)
+    public string GenerateToken(User user)
     {
-        var claims = new[]
+        ArgumentNullException.ThrowIfNull(user);
+        if (user.UserName == null || user.Email == null)
         {
-            new Claim(JwtRegisteredClaimNames.Sub, username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            return null;
+        }
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, user.UserName),
+            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.NameIdentifier, user.Id),
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Key));
@@ -31,5 +39,6 @@ public sealed class JwtTokenService(IOptions<JwtSettings> options) : IJwtTokenSe
             signingCredentials: creds
         );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);    }
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
 }

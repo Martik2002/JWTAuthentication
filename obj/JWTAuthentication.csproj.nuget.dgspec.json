@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Martik\\RiderProjects\\Kursayin\\JWTAuthentication\\JWTAuthentication.csproj": {}
+    "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\JWTAuthentication.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Martik\\RiderProjects\\Kursayin\\JWTAuthentication\\JWTAuthentication.csproj": {
+    "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\JWTAuthentication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Martik\\RiderProjects\\Kursayin\\JWTAuthentication\\JWTAuthentication.csproj",
+        "projectUniqueName": "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\JWTAuthentication.csproj",
         "projectName": "JWTAuthentication",
-        "projectPath": "C:\\Users\\Martik\\RiderProjects\\Kursayin\\JWTAuthentication\\JWTAuthentication.csproj",
+        "projectPath": "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\JWTAuthentication.csproj",
         "packagesPath": "C:\\Users\\Martik\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Martik\\RiderProjects\\Kursayin\\JWTAuthentication\\obj\\",
+        "outputPath": "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\obj\\",
         "projectStyle": "PackageReference",
         "UsingMicrosoftNETSdk": false,
         "configFilePaths": [

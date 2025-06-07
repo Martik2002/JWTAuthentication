@@ -13,6 +13,9 @@ public class UsersService : IUserService
         _context = context;
     }
 
+    
+    
+    
     public async Task<string> Register(string username,string email, string password)
     {
         var hashedPassword = _passwordHasher.Generate(password);

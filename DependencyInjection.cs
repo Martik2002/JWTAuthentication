@@ -13,9 +13,11 @@ public static class DependencyInjection
         service.AddControllersWithViews();
         service.AddEndpointsApiExplorer();
         service.AddSwaggerGen();
-        service.AddTransient<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        service.AddTransient<IApplicationDbContext>(provider => 
+            provider.GetRequiredService<ApplicationDbContext>());
         service.AddTransient<IUserService, UsersService>();
         service.AddTransient<IPasswordHasher, PasswordHasher>();
+        service.AddTransient<IJwtTokenService, JwtTokenService>();
         service.AddControllers();
         service.AddDbContext<ApplicationDbContext>((options) =>
         {

@@ -1,5 +1,5 @@
 ﻿using JWTAuthentication.Interfaces;
-using JWTAuthentication.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWTAuthentication.Controllers;
@@ -15,10 +15,28 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    [HttpPost]
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(string username, string password)
+    {
+        var result = await _userService.LoginAsync(username, password);
+        if (result == null)
+        {
+            return BadRequest();
+        }
+        return Ok(result);
+    }
+    
+    [HttpPost("register")]
     public async Task<IActionResult> Register(string username, string email, string password)
     {
         var result = await _userService.Register(username, email, password);
         return Ok(result);
+    }
+
+    [Authorize]
+    [HttpGet("TestLogin")]
+    public async Task<IActionResult> TestLogin()
+    {
+        return Ok("You are logged in");
     }
 }

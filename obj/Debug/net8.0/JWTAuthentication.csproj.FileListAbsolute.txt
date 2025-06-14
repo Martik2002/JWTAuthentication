@@ -311,3 +311,6 @@ C:\Users\Martik\RiderProjects\JWTAuthentication\obj\Debug\net8.0\refint\JWTAuthe
 C:\Users\Martik\RiderProjects\JWTAuthentication\obj\Debug\net8.0\JWTAuthentication.pdb
 C:\Users\Martik\RiderProjects\JWTAuthentication\obj\Debug\net8.0\JWTAuthentication.genruntimeconfig.cache
 C:\Users\Martik\RiderProjects\JWTAuthentication\obj\Debug\net8.0\ref\JWTAuthentication.dll
+C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Carter.dll
+C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Carter.Analyzers.dll
+C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\FluentValidation.dll

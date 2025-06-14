@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Carter;
 using JWTAuthentication.Database;
 using JWTAuthentication.Interfaces;
 using JWTAuthentication.Services;
@@ -28,6 +29,7 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         services.AddControllers();
+        services.AddCarter();
         
 
 

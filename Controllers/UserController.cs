@@ -7,19 +7,12 @@ namespace JWTAuthentication.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UserController : ControllerBase
+public class UserController(IUserService userService) : ControllerBase
 {
-    private readonly IUserService _userService;
-
-    public UserController(IUserService userService)
-    {
-        _userService = userService;
-    }
-
     [HttpPost("login")]
     public async Task<IActionResult> Login(string username, string password, CancellationToken cancellationToken)
     {
-        var result = await _userService.LoginAsync(username, password, cancellationToken);
+        var result = await userService.LoginAsync(username, password, cancellationToken);
         if (result == null)
         {
             return BadRequest();
@@ -30,7 +23,7 @@ public class UserController : ControllerBase
     [HttpPost("Validate-Token")]
     public async Task<IActionResult> ValidateRefreshToken(string userId, string password, CancellationToken cancellationToken)
     {
-        var result = await _userService.ValidateRefreshTokenAsync(userId, password, cancellationToken);
+        var result = await userService.ValidateRefreshTokenAsync(userId, password, cancellationToken);
         if (result is null)
         {
             return Unauthorized("Invalid refresh token");
@@ -41,7 +34,7 @@ public class UserController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(string username, string email, string password)
     {
-        var result = await _userService.Register(username, email, password);
+        var result = await userService.Register(username, email, password);
         return Ok(result);
     }
 

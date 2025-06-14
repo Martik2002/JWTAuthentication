@@ -1,4 +1,5 @@
-﻿using JWTAuthentication.Entities;
+﻿using JWTAuthentication.Common.Models.AuthResponse;
+using JWTAuthentication.Entities;
 using JWTAuthentication.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,14 +11,14 @@ public class UsersService(
     IJwtTokenService jwtTokenService)
     : IUserService
 {
-    public async Task<string> LoginAsync(string username, string password)
+    public async Task<JwtAuthResult> LoginAsync(string username, string password, CancellationToken cancellationToken)
     {
         if (username == null )
         {
             return null;
         }
         
-        var user = await context.Users.SingleOrDefaultAsync(u => u.UserName == username);
+        var user = await context.Users.SingleOrDefaultAsync(u => u.UserName == username, cancellationToken);
         if (user == null)
         {
             return null;
@@ -25,10 +26,27 @@ public class UsersService(
 
         if (!passwordHasher.Verify(password, user.PasswordHash))
         {
-            return "Wrong password";
+            return null;
         }
         var token =  await jwtTokenService.GenerateToken(user);
+        user.RefreshToken = token.RefreshToken.TokenString;
+        user.RefreshTokenExpiry = token.RefreshToken.Expires;
+        await context.SaveChangesAsync(cancellationToken);
         return token;
+    }
+
+    public async Task<User> ValidateRefreshTokenAsync(string userId, string refreshToken,
+        CancellationToken cancellationToken)
+    {
+        var user = await context.Users.SingleOrDefaultAsync(u => u.Id == userId, cancellationToken);
+
+        if (user is null || string.IsNullOrWhiteSpace(refreshToken) ||
+            user.RefreshToken != refreshToken || user.RefreshTokenExpiry <= DateTime.UtcNow)
+        {
+            return null;
+        }
+
+        return user;
     }
 
     public async Task<string> Register(string username,string email, string password)

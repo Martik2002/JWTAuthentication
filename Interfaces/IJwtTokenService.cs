@@ -1,8 +1,9 @@
-﻿using JWTAuthentication.Entities;
+﻿using JWTAuthentication.Common.Models.AuthResponse;
+using JWTAuthentication.Entities;
 
 namespace JWTAuthentication.Interfaces;
 
 public interface IJwtTokenService
 {
-    Task<string> GenerateToken(User user);
+    Task<JwtAuthResult> GenerateToken(User user);
 }

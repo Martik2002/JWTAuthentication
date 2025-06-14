@@ -17,12 +17,23 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(string username, string password)
+    public async Task<IActionResult> Login(string username, string password, CancellationToken cancellationToken)
     {
-        var result = await _userService.LoginAsync(username, password);
+        var result = await _userService.LoginAsync(username, password, cancellationToken);
         if (result == null)
         {
             return BadRequest();
+        }
+        return Ok(result);
+    }
+
+    [HttpPost("Validate-Token")]
+    public async Task<IActionResult> ValidateRefreshToken(string userId, string password, CancellationToken cancellationToken)
+    {
+        var result = await _userService.ValidateRefreshTokenAsync(userId, password, cancellationToken);
+        if (result is null)
+        {
+            return Unauthorized("Invalid refresh token");
         }
         return Ok(result);
     }

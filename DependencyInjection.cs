@@ -3,8 +3,11 @@ using JWTAuthentication.Database;
 using JWTAuthentication.Interfaces;
 using JWTAuthentication.Services;
 using JWTAuthentication.Common.Services;
+using JWTAuthentication.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -21,11 +24,18 @@ public static class DependencyInjection
         services.AddTransient<IUserService, UsersService>();
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         services.AddTransient<IJwtTokenService, JwtTokenService>();
+        services.AddIdentity<User, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
         services.AddControllers();
+        
+
 
         #region Database Configuration
-            services.AddDbContext<ApplicationDbContext>((options) =>
+            services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddHealthChecks()

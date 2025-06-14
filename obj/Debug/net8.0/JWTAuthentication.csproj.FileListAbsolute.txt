@@ -163,9 +163,6 @@ C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\JWTAuthenticati
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\JWTAuthentication.pdb
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\BCrypt.Net-Next.dll
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Humanizer.dll
-C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\MediatR.dll
-C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\MediatR.Contracts.dll
-C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\MediatR.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll

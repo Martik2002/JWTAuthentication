@@ -1,4 +1,5 @@
-﻿using JWTAuthentication.Interfaces;
+﻿using JWTAuthentication.Common.Constants;
+using JWTAuthentication.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,10 +34,17 @@ public class UserController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
+    [Authorize(Roles = Role.User)]
     [HttpGet("TestLogin")]
     public async Task<IActionResult> TestLogin()
     {
         return Ok("You are logged in");
+    }
+
+    [Authorize(Roles = Role.Admin)]
+    [HttpGet("TestAdmin")]
+    public async Task<IActionResult> TestAdmin()
+    {
+        return Ok("You are admin");
     }
 }

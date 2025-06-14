@@ -48,14 +48,6 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
-            "MediatR": {
-              "target": "Package",
-              "version": "[12.5.0, )"
-            },
-            "MediatR.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[11.1.0, )"
-            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.16, )"

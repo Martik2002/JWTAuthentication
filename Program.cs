@@ -1,3 +1,4 @@
+using Carter;
 using JWTAuthentication;
 using JWTAuthentication.Common.Models;
 using JWTAuthentication.Database;
@@ -39,6 +40,9 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapCarter();
+
 
 app.MapControllerRoute(
     name: "default",

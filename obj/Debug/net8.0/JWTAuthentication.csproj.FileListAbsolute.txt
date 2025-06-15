@@ -314,3 +314,4 @@ C:\Users\Martik\RiderProjects\JWTAuthentication\obj\Debug\net8.0\ref\JWTAuthenti
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Carter.dll
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Carter.Analyzers.dll
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Scrutor.dll

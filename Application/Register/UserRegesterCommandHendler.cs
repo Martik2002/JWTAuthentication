@@ -1,6 +1,11 @@
-﻿namespace JWTAuthentication.Application.Register;
+﻿using JWTAuthentication.Application.Abstractions.Interfaces;
 
-public class UserRegesterCommandHendler
+namespace JWTAuthentication.Application.Register;
+
+public class UserRegesterCommandHandler : IRequestHandler<UserRegisterCommand, string>
 {
-    
+    public async Task<string> HandleAsync(UserRegisterCommand request, CancellationToken cancellationToken)
+    {
+        return  request.Email;
+    }
 }

@@ -32,7 +32,7 @@ public static class DependencyInjection
             .AddDefaultTokenProviders();
         services.AddControllers();
         services.AddCarter();
-        services.AddScoped<Mediator>();
+        services.AddTransient<IMediator, Mediator>();
 
         #region Mediator Implementation
             services.Scan(scan =>

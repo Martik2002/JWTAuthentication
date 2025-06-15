@@ -1,6 +1,8 @@
 ﻿using Carter;
+using JWTAuthentication.Application.Abstractions.Interfaces;
 using JWTAuthentication.Application.Abstractions.Mediator;
 using JWTAuthentication.Application.Register;
+using JWTAuthentication.Application.Register.CreateCommand;
 using JWTAuthentication.Common.Constants;
 using JWTAuthentication.Common.Models.AuthResponse;
 using JWTAuthentication.Entities;
@@ -63,10 +65,11 @@ public class AuthEndpoints : ICarterModule
         return TypedResults.Ok(result);
     }
 
-    private async Task<Results<Ok<string>, BadRequest>> Register(string username, string email,
-        IUserService userService, string password)
+    private async Task<Results<Ok<string>, BadRequest>> Register([FromBody] UserRegisterCommand command,
+        [FromServices] IMediator mediator,
+        CancellationToken cancellationToken)
     {
-        var result = await userService.Register(username, email, password);
+        var result = await mediator.SendAsync(command, cancellationToken);
         if (result == null)
         {
             return TypedResults.BadRequest();

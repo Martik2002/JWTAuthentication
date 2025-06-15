@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "u/mm+Rr+vCY=",
+  "dgSpecHash": "VX6Vq+9/mKU=",
   "success": true,
   "projectFilePath": "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\JWTAuthentication.csproj",
   "expectedPackageFiles": [
@@ -58,6 +58,7 @@
     "C:\\Users\\Martik\\.nuget\\packages\\npgsql\\9.0.3\\npgsql.9.0.3.nupkg.sha512",
     "C:\\Users\\Martik\\.nuget\\packages\\npgsql.dependencyinjection\\9.0.3\\npgsql.dependencyinjection.9.0.3.nupkg.sha512",
     "C:\\Users\\Martik\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\9.0.3\\npgsql.entityframeworkcore.postgresql.9.0.3.nupkg.sha512",
+    "C:\\Users\\Martik\\.nuget\\packages\\scrutor\\6.1.0\\scrutor.6.1.0.nupkg.sha512",
     "C:\\Users\\Martik\\.nuget\\packages\\swashbuckle.aspnetcore\\7.2.0\\swashbuckle.aspnetcore.7.2.0.nupkg.sha512",
     "C:\\Users\\Martik\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\7.2.0\\swashbuckle.aspnetcore.swagger.7.2.0.nupkg.sha512",
     "C:\\Users\\Martik\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\7.2.0\\swashbuckle.aspnetcore.swaggergen.7.2.0.nupkg.sha512",

@@ -1,5 +1,7 @@
 ﻿using System.Text;
 using Carter;
+using JWTAuthentication.Application.Abstractions.Interfaces;
+using JWTAuthentication.Application.Abstractions.Mediator;
 using JWTAuthentication.Database;
 using JWTAuthentication.Interfaces;
 using JWTAuthentication.Services;
@@ -30,9 +32,17 @@ public static class DependencyInjection
             .AddDefaultTokenProviders();
         services.AddControllers();
         services.AddCarter();
+        services.AddScoped<Mediator>();
+
+        #region Mediator Implementation
+            services.Scan(scan =>
+                scan.FromAssembliesOf(typeof(DependencyInjection))
+                    .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<,>)), publicOnly: false)
+                    .AsImplementedInterfaces()
+                    .WithScopedLifetime()
+            );
+        #endregion
         
-
-
         #region Database Configuration
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {

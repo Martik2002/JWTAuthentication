@@ -1,8 +1,10 @@
 ﻿using Carter;
 using JWTAuthentication.Application.Abstractions.Interfaces;
 using JWTAuthentication.Application.Abstractions.Mediator;
+using JWTAuthentication.Application.Login;
 using JWTAuthentication.Application.Register;
 using JWTAuthentication.Application.Register.CreateCommand;
+using JWTAuthentication.Application.ValidateRefreshToken;
 using JWTAuthentication.Common.Constants;
 using JWTAuthentication.Common.Models.AuthResponse;
 using JWTAuthentication.Entities;
@@ -40,10 +42,10 @@ public class AuthEndpoints : ICarterModule
             .WithName(nameof(TestMediator));
     }
 
-    private async Task<Results<Ok<JwtAuthResult>, BadRequest>> Login(string username, string password,
-        IUserService userService, CancellationToken cancellationToken)
+    private async Task<Results<Ok<JwtAuthResult>, BadRequest>> Login(LoginCommand command,
+        IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await userService.LoginAsync(username, password, cancellationToken);
+        var result = await mediator.SendAsync(command, cancellationToken);
         if (result == null)
         {
             return TypedResults.BadRequest();
@@ -53,10 +55,10 @@ public class AuthEndpoints : ICarterModule
     }
 
 
-    private async Task<Results<Ok<User>, UnauthorizedHttpResult>> ValidateRefreshToken(string userId, string password,
-        IUserService userService, CancellationToken cancellationToken)
+    private async Task<Results<Ok<User>, UnauthorizedHttpResult>> ValidateRefreshToken(
+        ValidateRefreshTokenCommand command, IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await userService.ValidateRefreshTokenAsync(userId, password, cancellationToken);
+        var result = await mediator.SendAsync(command, cancellationToken);
         if (result is null)
         {
             return TypedResults.Unauthorized();
@@ -65,8 +67,8 @@ public class AuthEndpoints : ICarterModule
         return TypedResults.Ok(result);
     }
 
-    private async Task<Results<Ok<string>, BadRequest>> Register([FromBody] UserRegisterCommand command,
-        [FromServices] IMediator mediator,
+    private async Task<Results<Ok<string>, BadRequest>> Register(UserRegisterCommand command,
+        IMediator mediator,
         CancellationToken cancellationToken)
     {
         var result = await mediator.SendAsync(command, cancellationToken);

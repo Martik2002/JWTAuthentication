@@ -2,13 +2,11 @@
 using JWTAuthentication.Application.Abstractions.Interfaces;
 using JWTAuthentication.Application.Abstractions.Mediator;
 using JWTAuthentication.Application.Login;
-using JWTAuthentication.Application.Register;
 using JWTAuthentication.Application.Register.CreateCommand;
 using JWTAuthentication.Application.ValidateRefreshToken;
 using JWTAuthentication.Common.Constants;
 using JWTAuthentication.Common.Models.AuthResponse;
 using JWTAuthentication.Entities;
-using JWTAuthentication.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;

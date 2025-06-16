@@ -4,7 +4,6 @@ using JWTAuthentication.Application.Abstractions.Interfaces;
 using JWTAuthentication.Application.Abstractions.Mediator;
 using JWTAuthentication.Database;
 using JWTAuthentication.Interfaces;
-using JWTAuthentication.Services;
 using JWTAuthentication.Common.Services;
 using JWTAuthentication.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -24,7 +23,6 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddTransient<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
-        services.AddTransient<IUserService, UsersService>();
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         services.AddTransient<IJwtTokenService, JwtTokenService>();
         services.AddIdentity<User, IdentityRole>()

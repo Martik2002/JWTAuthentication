@@ -52,7 +52,6 @@ public class IdentityDataInitializer(
             DateOfBirth = DateTime.UtcNow,
             PasswordHash = passwordHasher.Generate("admin"),
             PhoneNumber = "123456789",
-            EmailConfirmed = true,
         };
 
         if (!context.Users.Any(x => x.UserName == user.UserName))

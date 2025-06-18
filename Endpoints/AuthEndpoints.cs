@@ -1,8 +1,9 @@
 ﻿using Carter;
 using JWTAuthentication.Application.Abstractions.Interfaces;
-using JWTAuthentication.Application.Abstractions.Mediator;
+using JWTAuthentication.Application.ActiveUser;
 using JWTAuthentication.Application.Login;
 using JWTAuthentication.Application.Register.CreateCommand;
+using JWTAuthentication.Application.SignOut;
 using JWTAuthentication.Application.ValidateRefreshToken;
 using JWTAuthentication.Common.Constants;
 using JWTAuthentication.Common.Models.AuthResponse;
@@ -16,28 +17,34 @@ namespace JWTAuthentication.Endpoints;
 
 public class AuthEndpoints : ICarterModule
 {
-    public  void AddRoutes(IEndpointRouteBuilder app)
+    public void AddRoutes(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("app/auth");
-        
+
         group.MapPost("login", Login).WithName(nameof(Login));
-        
-        group.MapPost("Validate-Token", ValidateRefreshToken)
+
+        group.MapPost("validateRefreshToken", ValidateRefreshToken)
             .RequireAuthorization()
             .WithName(nameof(ValidateRefreshToken));
-        
+
         group.MapPost("register", Register).WithName(nameof(Register));
+
+        group.MapPost("signOut", SignOut)
+            .RequireAuthorization()
+            .WithName(nameof(SignOut));
         
+        group.MapGet("GetActiveUser", GetActiveUser)
+            .RequireAuthorization()
+            .WithName(nameof(GetActiveUser));
+
         group.MapGet("TestLogin", TestLogin)
             .RequireAuthorization()
             .WithName(nameof(TestLogin));
-        
+
         group.MapGet("TestAdmin", TestAdmin)
             .RequireAuthorization()
             .WithName(nameof(TestAdmin));
         
-        group.MapPost("testMediator", TestMediator)
-            .WithName(nameof(TestMediator));
     }
 
     private async Task<Results<Ok<JwtAuthResult>, BadRequest>> Login(LoginCommand command,
@@ -66,7 +73,30 @@ public class AuthEndpoints : ICarterModule
     }
 
     private async Task<Results<Ok<string>, BadRequest>> Register(UserRegisterCommand command,
-        IMediator mediator,
+        IMediator mediator, CancellationToken cancellationToken)
+    {
+        var result = await mediator.SendAsync(command, cancellationToken);
+        if (result == null)
+        {
+            return TypedResults.BadRequest();
+        }
+
+        return TypedResults.Ok(result);
+    }
+
+    private async Task<Results<Ok<string>, BadRequest>> SignOut(SignOutCommand command, IMediator mediator,
+        CancellationToken cancellationToken)
+    {
+        var result = await mediator.SendAsync(command, cancellationToken);
+        if (result == null)
+        {
+            return TypedResults.BadRequest();
+        }
+
+        return TypedResults.Ok(result);
+    }
+
+    private async Task<Results<Ok<ActiveUserResponse>, BadRequest>> GetActiveUser([AsParameters]GetActiveUserCommand command,IMediator mediator,
         CancellationToken cancellationToken)
     {
         var result = await mediator.SendAsync(command, cancellationToken);
@@ -79,27 +109,14 @@ public class AuthEndpoints : ICarterModule
     }
 
     [Authorize(Roles = Role.User)]
-    public async Task<IResult> TestLogin()
+    public Task<IResult> TestLogin()
     {
-        return TypedResults.Ok("You are logged in");
+        return Task.FromResult<IResult>(TypedResults.Ok("You are logged in"));
     }
 
     [Authorize(Roles = Role.Admin)]
-    public async Task<IResult> TestAdmin()
+    public Task<IResult> TestAdmin()
     {
-        return TypedResults.Ok("You are admin");
-    }
-
-    public async Task<Results<Ok<string>, BadRequest>> TestMediator(
-        [FromBody] UserRegisterCommand command,
-        [FromServices] Mediator mediator,
-        CancellationToken cancellationToken)
-    {
-        var result = await mediator.SendAsync(command, cancellationToken);
-        if (result == null)
-        {
-            return TypedResults.BadRequest();
-        }
-        return TypedResults.Ok(result);
+        return Task.FromResult<IResult>(TypedResults.Ok("You are admin"));
     }
 }

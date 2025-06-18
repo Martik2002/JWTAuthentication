@@ -4324,19 +4324,20 @@
     ]
   },
   "packageFolders": {
-    "/home/codespace/.nuget/packages/": {}
+    "C:\\Users\\Martik\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/workspaces/JWTAuthentication/JWTAuthentication.csproj",
+      "projectUniqueName": "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\JWTAuthentication.csproj",
       "projectName": "JWTAuthentication",
-      "projectPath": "/workspaces/JWTAuthentication/JWTAuthentication.csproj",
-      "packagesPath": "/home/codespace/.nuget/packages/",
-      "outputPath": "/workspaces/JWTAuthentication/obj/",
+      "projectPath": "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\JWTAuthentication.csproj",
+      "packagesPath": "C:\\Users\\Martik\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Martik\\RiderProjects\\JWTAuthentication\\obj\\",
       "projectStyle": "PackageReference",
+      "UsingMicrosoftNETSdk": false,
       "configFilePaths": [
-        "/home/codespace/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Martik\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -4358,7 +4359,7 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "direct"
+        "auditMode": "all"
       }
     },
     "frameworks": {
@@ -4435,7 +4436,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.407/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Users\\Martik\\.dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

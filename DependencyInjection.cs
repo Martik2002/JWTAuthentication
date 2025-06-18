@@ -2,6 +2,7 @@
 using Carter;
 using JWTAuthentication.Application.Abstractions.Interfaces;
 using JWTAuthentication.Application.Abstractions.Mediator;
+using JWTAuthentication.Application.Abstractions.Services;
 using JWTAuthentication.Database;
 using JWTAuthentication.Interfaces;
 using JWTAuthentication.Common.Services;
@@ -25,12 +26,15 @@ public static class DependencyInjection
             provider.GetRequiredService<ApplicationDbContext>());
         services.AddTransient<IPasswordHasher, PasswordHasher>();
         services.AddTransient<IJwtTokenService, JwtTokenService>();
+        services.AddTransient<IMediator, Mediator>();
+        services.AddTransient<IUser, CurrentUser>();
+        services.AddHttpContextAccessor();
         services.AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         services.AddControllers();
         services.AddCarter();
-        services.AddTransient<IMediator, Mediator>();
+        
 
         #region Mediator Implementation
             services.Scan(scan =>

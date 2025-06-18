@@ -480,3 +480,20 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 .azure
+# Build artifacts
+bin/
+obj/
+
+# NuGet artifacts
+*.nuget.cache
+*.nuget.info
+*.dgspec.json
+*.assets.cache
+*.GeneratedMSBuildEditorConfig.input
+*.csproj.nuget.*
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+*.DotSettings.user
+*.docstates

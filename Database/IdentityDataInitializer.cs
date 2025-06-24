@@ -2,6 +2,7 @@
 using JWTAuthentication.Entities;
 using JWTAuthentication.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace JWTAuthentication.Database;
 
@@ -11,10 +12,11 @@ public class IdentityDataInitializer(
     IPasswordHasher passwordHasher,
     IApplicationDbContext context)
 {
-    public async Task InitialiseAsync()
+    public async Task InitialiseAsync(WebApplication app)
     {
         try
         {
+            await DatabaseInitialiseAsync(app);
             await SeedRolesAsync();
             await SeedUsersAsync();
         }
@@ -23,6 +25,15 @@ public class IdentityDataInitializer(
             Console.WriteLine(ex.Message);
             throw;
         }
+    }
+
+    private async Task DatabaseInitialiseAsync(WebApplication app)
+    {
+        Console.WriteLine("Initialising database...");
+        using var scope = app.Services.CreateScope();
+    //    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        //await db.Database.MigrateAsync(); // Applies migrations automatically
+        Console.WriteLine("Migrated database");
     }
 
     private async Task SeedRolesAsync()

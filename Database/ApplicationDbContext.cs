@@ -23,11 +23,14 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
 {
     public ApplicationDbContext CreateDbContext(string[] args)
     {
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory()) // or custom path
-            .AddJsonFile("appsettings.json", optional: false)
-            .Build();
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
 
+        // Build configuration with environment-specific JSON file
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile($"appsettings.{environment}.json", optional: true)
+            .Build();
+        
         var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
         builder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
 

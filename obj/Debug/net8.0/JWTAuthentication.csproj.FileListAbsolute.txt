@@ -315,3 +315,5 @@ C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Carter.dll
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Carter.Analyzers.dll
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\FluentValidation.dll
 C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Scrutor.dll
+C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\appsettings.Production.json
+C:\Users\Martik\RiderProjects\JWTAuthentication\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll

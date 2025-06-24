@@ -1,5 +1,4 @@
-﻿using Carter;
-using JWTAuthentication.Application.Abstractions.Interfaces;
+﻿using JWTAuthentication.Application.Abstractions.Interfaces;
 using JWTAuthentication.Application.ActiveUser;
 using JWTAuthentication.Application.Login;
 using JWTAuthentication.Application.Register.CreateCommand;
@@ -8,17 +7,16 @@ using JWTAuthentication.Application.ValidateRefreshToken;
 using JWTAuthentication.Common.Constants;
 using JWTAuthentication.Common.Models.AuthResponse;
 using JWTAuthentication.Entities;
+using JWTAuthentication.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 
 
 namespace JWTAuthentication.Endpoints;
 
-public class AuthEndpoints : ICarterModule
+public class AuthEndpoints : EndpointGroupBase
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
-    {
+    public override void Map(WebApplication app)    {
         var group = app.MapGroup("app/auth");
 
         group.MapPost("login", Login).WithName(nameof(Login));
@@ -119,4 +117,6 @@ public class AuthEndpoints : ICarterModule
     {
         return Task.FromResult<IResult>(TypedResults.Ok("You are admin"));
     }
+
+
 }

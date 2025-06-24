@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Carter;
 using JWTAuthentication.Application.Abstractions.Interfaces;
 using JWTAuthentication.Application.Abstractions.Mediator;
 using JWTAuthentication.Application.Abstractions.Services;
@@ -33,7 +32,6 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         services.AddControllers();
-        services.AddCarter();
         
 
         #region Mediator Implementation
@@ -49,7 +47,7 @@ public static class DependencyInjection
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-
+                Console.WriteLine(configuration.GetConnectionString("DefaultConnection"));
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddHealthChecks()

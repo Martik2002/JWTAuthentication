@@ -9,6 +9,7 @@ namespace JWTAuthentication.Database;
 public class IdentityDataInitializer(
     UserManager<User> userManager,
     RoleManager<IdentityRole> roleManager,
+    ILogger<IdentityDataInitializer> logger,
     IPasswordHasher passwordHasher,
     IApplicationDbContext context)
 {
@@ -22,18 +23,18 @@ public class IdentityDataInitializer(
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            logger.LogError(ex.Message);
             throw;
         }
     }
 
     private async Task DatabaseInitialiseAsync(WebApplication app)
     {
-        Console.WriteLine("Initialising database...");
+        logger.LogInformation("Initialising database...");
         using var scope = app.Services.CreateScope();
-    //    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        //await db.Database.MigrateAsync(); // Applies migrations automatically
-        Console.WriteLine("Migrated database");
+        var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await db.Database.MigrateAsync(); // Applies migrations automatically
+        logger.LogInformation("Migrated database");
     }
 
     private async Task SeedRolesAsync()

@@ -47,7 +47,6 @@ public static class DependencyInjection
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
                 options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-                Console.WriteLine(configuration.GetConnectionString("DefaultConnection"));
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddHealthChecks()

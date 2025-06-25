@@ -45,15 +45,16 @@ public class AuthEndpoints : EndpointGroupBase
         
     }
 
-    private async Task<Results<Ok<JwtAuthResult>, BadRequest>> Login(LoginCommand command,
+    private async Task<Results<Ok<JwtAuthResult>, BadRequest>> Login(LoginCommand command,ILogger<AuthEndpoints> logger,
         IMediator mediator, CancellationToken cancellationToken)
     {
+        logger.LogInformation($"Login: {command.Username}:{command.Password}");
         var result = await mediator.SendAsync(command, cancellationToken);
         if (result == null)
         {
             return TypedResults.BadRequest();
         }
-
+        logger.LogInformation("Login successful");
         return TypedResults.Ok(result);
     }
 

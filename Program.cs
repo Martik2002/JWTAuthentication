@@ -2,6 +2,7 @@ using JWTAuthentication;
 using JWTAuthentication.Common.Models;
 using JWTAuthentication.Database;
 using JWTAuthentication.Infrastructure;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,18 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
+// added logger for file
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information() //you can change minimum leval
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+builder.Services.AddLogging(loggingBuilder =>
+    loggingBuilder.AddSerilog(dispose: true));
+
+builder.Services.AddRequestTimeouts();
 
 #region --service config
 

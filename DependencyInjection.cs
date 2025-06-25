@@ -32,7 +32,6 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         services.AddControllers();
-        
 
         #region Mediator Implementation
             services.Scan(scan =>

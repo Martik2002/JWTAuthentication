@@ -1,4 +1,5 @@
 using JWTAuthentication;
+using JWTAuthentication.Common.Behaviours;
 using JWTAuthentication.Common.Models;
 using JWTAuthentication.Database;
 using JWTAuthentication.Infrastructure;
@@ -54,6 +55,8 @@ app.UseStaticFiles();
 
 
 app.UseRouting();
+
+app.UseMiddleware<UnhandledExceptionBehaviour>();
 
 app.UseAuthentication();
 app.UseAuthorization();

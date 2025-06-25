@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace JWTAuthentication.Common.Exception;
+namespace JWTAuthentication.Common.Exceptions;
 
 public class RestApiResponseException(int errorCode, string message) : System.Exception(message)
 {

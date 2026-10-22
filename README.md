@@ -49,8 +49,14 @@ git clone https://github.com/Martik2002/JWTAuthentication.git
 cd JWTAuthentication
 ```
 
-2. **Update `appsettings.Development.json`**  
-Provide correct PostgreSQL connection string.
+2. **Configure settings**  
+`appsettings.Development.json` contains local-only defaults (PostgreSQL `postgres/postgres` on `localhost:5432` and a development signing key), so the project runs out of the box.  
+To use your own values without committing them, use [user secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets):
+
+```bash
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=JWTAuthentication;Username=postgres;Password=<your-password>"
+dotnet user-secrets set "JwtSettings:Key" "<random string, at least 64 characters>"
+```
 
 3. **Apply Migrations**
 
@@ -79,10 +85,13 @@ docker build -t jwt-auth-api .
 2. **Run the Docker container**
 
 ```bash
-docker run -d -p 5000:80 --name jwt-auth-api jwt-auth-api
+docker run -d -p 5000:8080 --name jwt-auth-api \
+  -e ConnectionStrings__DefaultConnection="Host=<db-host>;Port=5432;Database=JWTAuthentication;Username=postgres;Password=<password>" \
+  -e JwtSettings__Key="<random string, at least 64 characters>" \
+  jwt-auth-api
 ```
 
-> Make sure PostgreSQL is accessible from the container.
+> In production, secrets are never stored in `appsettings*.json` — they are provided through environment variables. The app fails fast at startup if `JwtSettings:Key` is missing.
 
 ---
 
@@ -142,15 +151,18 @@ Authorization: Bearer {your_access_token}
 ## 📤 Project Structure
 
 ```
-├── Controllers/
-├── Services/
-├── Models/
-├── Middleware/
-├── Settings/
+├── Application/        # CQRS commands & handlers (Login, Register, Refresh, SignOut, ActiveUser)
+│   └── Abstractions/   # Custom mediator, request/handler interfaces, current user service
+├── Common/             # JWT settings, token & password services, exception middleware
+├── Database/           # ApplicationDbContext and seed data
+├── Endpoints/          # Minimal API endpoint groups
+├── Entities/           # Domain entities
+├── Infrastructure/     # Endpoint registration helpers
+├── Interfaces/         # Service abstractions
+├── Migrations/         # EF Core migrations
+├── DependencyInjection.cs
 ├── Program.cs
-├── appsettings.json
-├── Dockerfile
-├── README.md
+└── Dockerfile
 ```
 
 ---

@@ -1,6 +1,8 @@
 
 # 🛡️ JWTAuthentication
 
+[![Build](https://github.com/Martik2002/JWTAuthentication/actions/workflows/build.yml/badge.svg)](https://github.com/Martik2002/JWTAuthentication/actions/workflows/build.yml)
+
 This project demonstrates how to implement **JWT (JSON Web Token) based authentication** using ASP.NET Core and Entity Framework Core.
 
 ---

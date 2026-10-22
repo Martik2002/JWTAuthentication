@@ -1,123 +1,96 @@
 ﻿using JWTAuthentication.Application.Abstractions.Interfaces;
-using JWTAuthentication.Application.ActiveUser;
-using JWTAuthentication.Application.Login;
-using JWTAuthentication.Application.Register.CreateCommand;
-using JWTAuthentication.Application.SignOut;
-using JWTAuthentication.Application.ValidateRefreshToken;
+using JWTAuthentication.Application.Auth;
+using JWTAuthentication.Application.Auth.Login;
+using JWTAuthentication.Application.Auth.Logout;
+using JWTAuthentication.Application.Auth.Me;
+using JWTAuthentication.Application.Auth.Refresh;
+using JWTAuthentication.Application.Auth.Register;
 using JWTAuthentication.Common.Constants;
-using JWTAuthentication.Common.Models.AuthResponse;
-using JWTAuthentication.Entities;
+using JWTAuthentication.Common.Results;
+using JWTAuthentication.Common.Validation;
 using JWTAuthentication.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-
 
 namespace JWTAuthentication.Endpoints;
 
-public class AuthEndpoints : EndpointGroupBase
+public sealed class AuthEndpoints : EndpointGroupBase
 {
-    public override void Map(WebApplication app)    {
-        var group = app.MapGroup("app/auth");
+    public const string RateLimitPolicy = "auth";
 
-        group.MapPost("login", Login).WithName(nameof(Login));
-
-        group.MapPost("validateRefreshToken", ValidateRefreshToken)
-            .RequireAuthorization()
-            .WithName(nameof(ValidateRefreshToken));
-
-        group.MapPost("register", Register).WithName(nameof(Register));
-
-        group.MapPost("signOut", SignOut)
-            .RequireAuthorization()
-            .WithName(nameof(SignOut));
-        
-        group.MapGet("GetActiveUser", GetActiveUser)
-            .RequireAuthorization()
-            .WithName(nameof(GetActiveUser));
-
-        group.MapGet("TestLogin", TestLogin)
-            .RequireAuthorization()
-            .WithName(nameof(TestLogin));
-
-        group.MapGet("TestAdmin", TestAdmin)
-            .RequireAuthorization()
-            .WithName(nameof(TestAdmin));
-        
-    }
-
-    private async Task<Results<Ok<JwtAuthResult>, BadRequest>> Login(LoginCommand command,ILogger<AuthEndpoints> logger,
-        IMediator mediator, CancellationToken cancellationToken)
+    public override void Map(WebApplication app)
     {
-        logger.LogInformation($"Login: {command.Username}:{command.Password}");
-        var result = await mediator.SendAsync(command, cancellationToken);
-        if (result == null)
-        {
-            return TypedResults.BadRequest();
-        }
-        logger.LogInformation("Login successful");
-        return TypedResults.Ok(result);
+        var group = app.MapGroup("/api/auth")
+            .WithTags("Auth")
+            .WithOpenApi();
+
+        group.MapPost("register", Register)
+            .WithName(nameof(Register))
+            .WithValidation<RegisterCommand>()
+            .RequireRateLimiting(RateLimitPolicy)
+            .Produces<RegisterResponse>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status409Conflict);
+
+        group.MapPost("login", Login)
+            .WithName(nameof(Login))
+            .WithValidation<LoginCommand>()
+            .RequireRateLimiting(RateLimitPolicy)
+            .Produces<AuthResponse>()
+            .ProducesProblem(StatusCodes.Status401Unauthorized);
+
+        // Anonymous on purpose: the client calls this when its access token has expired.
+        group.MapPost("refresh", Refresh)
+            .WithName(nameof(Refresh))
+            .WithValidation<RefreshTokenCommand>()
+            .RequireRateLimiting(RateLimitPolicy)
+            .Produces<AuthResponse>()
+            .ProducesProblem(StatusCodes.Status401Unauthorized);
+
+        group.MapPost("logout", Logout)
+            .WithName(nameof(Logout))
+            .RequireAuthorization()
+            .Produces(StatusCodes.Status204NoContent);
+
+        group.MapGet("me", Me)
+            .WithName(nameof(Me))
+            .RequireAuthorization()
+            .Produces<CurrentUserResponse>();
+
+        group.MapGet("admin", Admin)
+            .WithName(nameof(Admin))
+            .RequireAuthorization(policy => policy.RequireRole(Role.Admin))
+            .Produces<string>();
     }
 
-
-    private async Task<Results<Ok<User>, UnauthorizedHttpResult>> ValidateRefreshToken(
-        ValidateRefreshTokenCommand command, IMediator mediator, CancellationToken cancellationToken)
-    {
-        var result = await mediator.SendAsync(command, cancellationToken);
-        if (result is null)
-        {
-            return TypedResults.Unauthorized();
-        }
-
-        return TypedResults.Ok(result);
-    }
-
-    private async Task<Results<Ok<string>, BadRequest>> Register(UserRegisterCommand command,
-        IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<IResult> Register(RegisterCommand command, IMediator mediator, CancellationToken cancellationToken)
     {
         var result = await mediator.SendAsync(command, cancellationToken);
-        if (result == null)
-        {
-            return TypedResults.BadRequest();
-        }
-
-        return TypedResults.Ok(result);
+        return result.IsSuccess
+            ? TypedResults.Created("/api/auth/me", result.Value)
+            : result.Error.ToProblem();
     }
 
-    private async Task<Results<Ok<string>, BadRequest>> SignOut(SignOutCommand command, IMediator mediator,
-        CancellationToken cancellationToken)
+    private static async Task<IResult> Login(LoginCommand command, IMediator mediator, CancellationToken cancellationToken)
     {
         var result = await mediator.SendAsync(command, cancellationToken);
-        if (result == null)
-        {
-            return TypedResults.BadRequest();
-        }
-
-        return TypedResults.Ok(result);
+        return result.IsSuccess ? TypedResults.Ok(result.Value) : result.Error.ToProblem();
     }
 
-    private async Task<Results<Ok<ActiveUserResponse>, BadRequest>> GetActiveUser([AsParameters]GetActiveUserCommand command,IMediator mediator,
-        CancellationToken cancellationToken)
+    private static async Task<IResult> Refresh(RefreshTokenCommand command, IMediator mediator, CancellationToken cancellationToken)
     {
         var result = await mediator.SendAsync(command, cancellationToken);
-        if (result == null)
-        {
-            return TypedResults.BadRequest();
-        }
-
-        return TypedResults.Ok(result);
+        return result.IsSuccess ? TypedResults.Ok(result.Value) : result.Error.ToProblem();
     }
 
-    [Authorize(Roles = Role.User)]
-    public Task<IResult> TestLogin()
+    private static async Task<IResult> Logout(IMediator mediator, CancellationToken cancellationToken)
     {
-        return Task.FromResult<IResult>(TypedResults.Ok("You are logged in"));
+        var result = await mediator.SendAsync(new LogoutCommand(), cancellationToken);
+        return result.IsSuccess ? TypedResults.NoContent() : result.Error.ToProblem();
     }
 
-    [Authorize(Roles = Role.Admin)]
-    public Task<IResult> TestAdmin()
+    private static async Task<IResult> Me(IMediator mediator, CancellationToken cancellationToken)
     {
-        return Task.FromResult<IResult>(TypedResults.Ok("You are admin"));
+        var result = await mediator.SendAsync(new GetCurrentUserQuery(), cancellationToken);
+        return result.IsSuccess ? TypedResults.Ok(result.Value) : result.Error.ToProblem();
     }
 
-
+    private static IResult Admin() => TypedResults.Ok("You are an admin.");
 }

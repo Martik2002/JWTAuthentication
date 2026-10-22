@@ -1,70 +1,53 @@
 using JWTAuthentication;
-using JWTAuthentication.Common.Behaviours;
-using JWTAuthentication.Common.Models;
 using JWTAuthentication.Database;
 using JWTAuthentication.Infrastructure;
 using Serilog;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuration is loaded by CreateBuilder in this order:
 // appsettings.json -> appsettings.{Environment}.json -> user secrets (Development) -> environment variables.
 // Secrets (JwtSettings:Key, ConnectionStrings:DefaultConnection) must come from user secrets or environment variables.
-builder.Services.Configure<JwtSettings>(
-    builder.Configuration.GetSection("JwtSettings"));
 
-// added logger for file
-Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Information() //you can change minimum leval
-    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
+builder.Host.UseSerilog((context, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day));
 
-builder.Host.UseSerilog();
-
-builder.Services.AddLogging(loggingBuilder =>
-    loggingBuilder.AddSerilog(dispose: true));
-
-builder.Services.AddRequestTimeouts();
-
-#region --service config
-
-builder.Services.ServiceProvider(builder.Configuration);
-builder.Services.AddScoped<IdentityDataInitializer>();
-#endregion
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerUI();
     app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
-
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-
-
-app.UseRouting();
-
-app.UseMiddleware<UnhandledExceptionBehaviour>();
-
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHealthChecks("/health");
 app.MapEndpoints();
 
-using (var scope = app.Services.CreateScope())
+await using (var scope = app.Services.CreateAsyncScope())
 {
-    var dbContextInitialiser = scope.ServiceProvider.GetRequiredService<IdentityDataInitializer>();
-    await dbContextInitialiser.InitialiseAsync(app);
+    var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+    await initializer.InitialiseAsync();
 }
 
 app.Run();
+
+// Makes the Program class visible to WebApplicationFactory in the integration tests
+public partial class Program { }

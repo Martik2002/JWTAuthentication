@@ -8,13 +8,11 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuration is loaded by CreateBuilder in this order:
+// appsettings.json -> appsettings.{Environment}.json -> user secrets (Development) -> environment variables.
+// Secrets (JwtSettings:Key, ConnectionStrings:DefaultConnection) must come from user secrets or environment variables.
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings"));
-
-builder.Configuration
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables();
 
 // added logger for file
 Log.Logger = new LoggerConfiguration()

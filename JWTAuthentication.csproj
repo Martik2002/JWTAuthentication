@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>jwtauthentication-5f2c8a71-3d4e-4b9a-9c61-8e0f2a7d4b13</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

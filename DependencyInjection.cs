@@ -84,6 +84,16 @@ public static class DependencyInjection
         #endregion
 
         #region Authentication Configuration
+            var jwtKey = configuration["JwtSettings:Key"];
+            // HMAC-SHA512 needs a key of at least 64 bytes
+            if (string.IsNullOrWhiteSpace(jwtKey) || Encoding.UTF8.GetByteCount(jwtKey) < 64)
+            {
+                throw new InvalidOperationException(
+                    "JwtSettings:Key is missing or shorter than 64 characters. " +
+                    "Set it with 'dotnet user-secrets set \"JwtSettings:Key\" \"<value>\"' " +
+                    "or the 'JwtSettings__Key' environment variable.");
+            }
+
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -99,7 +109,7 @@ public static class DependencyInjection
                         ValidAudience = configuration["JwtSettings:Audience"],
                         ValidateLifetime = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!)),
+                            Encoding.UTF8.GetBytes(jwtKey)),
                         ValidateIssuerSigningKey = true
                     };
                 });
